@@ -13,7 +13,10 @@
 1. `leanrea` 스킬로 형식 판별·inventory·공격면 triage. 의심 지점(함수명, 주소, 문자열)을 `notes/<name>.md`에 "미확인"으로 적는다.
 2. 의심 지점의 디컴파일·호출 관계가 필요할 때만 Ghidra를 부른다: `tools/ghidra/query.sh targets/<name>/<binary> <func|0xaddr|str:text>...`
    - 출력: 시그니처, CALLER(호출 위치), CALLEE, 디컴파일 C. `str:`는 해당 문자열을 참조하는 함수 전부.
-   - 첫 호출만 import+자동분석(수 분), 이후는 `analysis/<name>/ghidra` DB를 read-only로 재사용. 결과는 `analysis/<name>/<binary>/query-*.txt`.
+   - 첫 호출만 import+자동분석(수 분), 이후는 `analysis/<name>/ghidra` DB를 read-only로 재사용.
+   - 호출마다 JVM 기동 약 5초 고정비용: 한 라운드의 의심 지점은 한 번의 호출에 모아서 넘긴다.
+   - stdout은 축약본(WARNING 주석·빈 줄 제거, 함수당 200줄, `QUERY_MAX_LINES`로 조정). 잘리면 표시된 `query-*.txt` 전체본에서 필요한 부분만 읽는다.
+   - 같은 대상에 대한 동시 호출은 자동으로 줄 서서 실행된다(Ghidra 프로젝트 락은 배타적).
    - 질의 결과에서 새 의심 지점(CALLER/CALLEE)이 나오면 같은 방식으로 반복한다.
 3. JS/.NET/APK 등 Ghidra가 부적합한 형식은 leanrea가 안내하는 도구로 끝낸다.
 4. 확인된 지점은 `fp-check` 후 `findings/`로.
