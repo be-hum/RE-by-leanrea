@@ -36,9 +36,10 @@ CALLEE  <entry> <callee> [ext]
 <decompiled C>
 ```
 
-- 첫 호출에서만 import와 자동 분석을 수행하고, 이후에는 `analysis/<name>/ghidra` 프로젝트를 read-only로 재사용한다.
+- 첫 호출(또는 바이너리 내용이 바뀐 경우, sha256 기준)에만 import와 자동 분석을 수행하고, 이후에는 `analysis/<name>/ghidra` 프로젝트를 read-only로 재사용한다.
 - import 때 `FixEntry.java`가 stripped 바이너리의 `main`처럼 entry에서만 참조되는 코드를 함수로 복구한다.
-- 결과는 `analysis/<name>/<binary>/query-*.txt`에도 저장된다. stdout은 축약본(함수당 200줄, `QUERY_MAX_LINES`).
+- 결과는 `analysis/<name>/<binary>/query-*.txt`에도 저장된다. stdout은 축약본(함수당 200줄, `QUERY_MAX_LINES`)이고, 넘치는 부분은 제어문·라벨·호출 줄만 원본 줄 번호(`L<n>`)와 함께 골격으로 출력된다(최대 `QUERY_SKEL_LINES`, 기본 100).
+- 질의마다 함수, CALLER, CALLEE가 `analysis/<name>/trail.tsv`에 한 줄씩 누적된다(탐색 경로 기록).
 - 같은 대상에 대한 동시 호출은 순서대로 실행된다.
 
 전체 덤프가 필요하면:
