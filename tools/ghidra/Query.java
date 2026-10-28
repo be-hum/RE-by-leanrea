@@ -4,6 +4,7 @@
 // str: resolves every function that references a defined string containing the substring.
 import ghidra.app.decompiler.*;
 import ghidra.app.script.GhidraScript;
+import ghidra.program.model.address.Address;
 import ghidra.program.model.data.StringDataInstance;
 import ghidra.program.model.listing.*;
 import ghidra.program.model.symbol.*;
@@ -23,9 +24,10 @@ public class Query extends GhidraScript {
         Set<Function> seen = new LinkedHashSet<>();
         for (String q : Arrays.copyOfRange(args, 1, args.length)) {
             List<Function> fs = resolve(q);
-            if (fs.isEmpty()) out.println("QUERY " + q + ": not found");
+            if (fs.isEmpty() && !q.startsWith("str:")) out.println("QUERY " + q + ": no function found");
             for (Function f : fs)
                 if (seen.add(f)) dump(q, f);
+                else out.println("QUERY " + q + " -> " + f.getName(true) + ": already shown above");
         }
         di.dispose();
         out.close();
@@ -36,25 +38,33 @@ public class Query extends GhidraScript {
         FunctionManager fm = currentProgram.getFunctionManager();
         if (q.startsWith("str:")) {
             String needle = q.substring(4);
+            int strings = 0;
             for (Data d : currentProgram.getListing().getDefinedData(true)) {
                 StringDataInstance s = StringDataInstance.getStringDataInstance(d);
                 String v = s == StringDataInstance.NULL_INSTANCE ? null : s.getStringValue();
                 if (v == null || !v.contains(needle)) continue;
-                for (Reference r : getReferencesTo(d.getAddress())) {
-                    Function f = fm.getFunctionContaining(r.getFromAddress());
-                    out.println("STRING " + d.getAddress() + " \"" + v + "\" <- " + r.getFromAddress()
+                strings++;
+                List<Address> sites = new ArrayList<>();
+                for (Reference r : getReferencesTo(d.getAddress())) sites.add(r.getFromAddress());
+                if (sites.isEmpty())
+                    out.println("STRING " + d.getAddress() + " \"" + esc(v) + "\" (no references)");
+                for (Address from : sites) {
+                    Function f = fm.getFunctionContaining(from);
+                    out.println("STRING " + d.getAddress() + " \"" + esc(v) + "\" <- " + from
                             + (f == null ? "" : " in " + f.getName()));
-                    if (f == null) out.println("  (ref site not inside a defined function; query its entry address)");
+                    if (f == null) out.println("  (ref site not inside a defined function; find the enclosing function start, e.g. objdump)");
                     if (f != null && !found.contains(f)) found.add(f);
                 }
             }
+            if (strings == 0) out.println("QUERY " + q + ": no defined string contains this text");
         } else if (q.startsWith("0x")) {
             Function f = fm.getFunctionContaining(toAddr(q));
             if (f == null) {
                 // Stripped binaries often leave real functions (e.g. main) as labels; create one in-memory (-readOnly, not saved).
                 disassemble(toAddr(q));
                 f = createFunction(toAddr(q), null);
-                if (f != null) out.println("NOTE created function at " + q + " (not saved)");
+                if (f != null) out.println("NOTE created function at " + q + " (not saved). If this is not a real"
+                        + " function start, the decompile is a fragment (unaff_/in_stack_ vars); query the true start instead.");
             }
             if (f != null) found.add(f);
         } else {
@@ -63,6 +73,8 @@ public class Query extends GhidraScript {
         }
         return found;
     }
+
+    private static String esc(String v) { return v.replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t"); }
 
     private void dump(String q, Function f) throws Exception {
         out.println("==== QUERY " + q + " -> " + f.getName(true) + " @ " + f.getEntryPoint());

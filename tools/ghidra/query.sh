@@ -22,7 +22,7 @@ exec 9>"$proj/.flock"
 flock 9
 if [[ ! -e "$proj/$name.rep/idata/~index.dat" ]] || ! grep -q "$(basename "$bin")" "$proj/$name.rep/idata/~index.dat"; then
   echo "importing + analyzing $(basename "$bin") (one-time, may take minutes)..." >&2
-  run "$proj" "$name" -import "$bin" > "$out/import.log" 2>&1 \
+  run "$proj" "$name" -import "$bin" -scriptPath "$root/tools/ghidra" -postScript FixEntry.java > "$out/import.log" 2>&1 \
     || { tail -20 "$out/import.log"; exit 1; }
 fi
 

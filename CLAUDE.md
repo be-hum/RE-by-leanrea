@@ -11,9 +11,12 @@
 
 ## 분석 흐름: leanrea -> 의심 지점 -> Ghidra 질의
 1. `leanrea` 스킬로 형식 판별·inventory·공격면 triage. 의심 지점(함수명, 주소, 문자열)을 `notes/<name>.md`에 "미확인"으로 적는다.
+   - leanrea 작업 디렉토리(`$D`, dis.txt 등)는 scratchpad 대신 `analysis/<name>/re/`를 쓴다(세션이 바뀌어도 유지).
 2. 의심 지점의 디컴파일·호출 관계가 필요할 때만 Ghidra를 부른다: `tools/ghidra/query.sh targets/<name>/<binary> <func|0xaddr|str:text>...`
    - 출력: 시그니처, CALLER(호출 위치), CALLEE, 디컴파일 C. `str:`는 해당 문자열을 참조하는 함수 전부.
    - 첫 호출만 import+자동분석(수 분), 이후는 `analysis/<name>/ghidra` DB를 read-only로 재사용.
+   - import 때 `FixEntry.java`가 entry에서 참조되는 코드(stripped `main` 등)를 함수로 만들고 재분석한다. `str:`가 "not inside a defined function"을 내면 그 외 경로로 호출되는 함수이니 objdump로 시작 주소를 찾아 주소로 질의한다.
+   - 주소 질의는 함수 시작 주소로 한다. 중간 주소면 같은 함수로 해석되거나(이미 정의된 경우) 조각 디컴파일이 나온다.
    - 호출마다 JVM 기동 약 5초 고정비용: 한 라운드의 의심 지점은 한 번의 호출에 모아서 넘긴다.
    - stdout은 축약본(WARNING 주석·빈 줄 제거, 함수당 200줄, `QUERY_MAX_LINES`로 조정). 잘리면 표시된 `query-*.txt` 전체본에서 필요한 부분만 읽는다.
    - 같은 대상에 대한 동시 호출은 자동으로 줄 서서 실행된다(Ghidra 프로젝트 락은 배타적).
