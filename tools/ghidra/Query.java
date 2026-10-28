@@ -1,4 +1,4 @@
-// Targeted lookup for suspect points found during leanrea triage.
+// Targeted lookup for points of interest found during leanrea triage.
 // Args: <outfile> then one or more of: <func name> | 0x<addr> | str:<substring>
 // For each resolved function: signature, callers (with call sites), callees, decompiled C.
 // str: resolves every function that references a defined string containing the substring.

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Usage: tools/ghidra/query.sh targets/<name>/<binary> <func|0xaddr|str:text>...
 # First call imports + auto-analyzes into analysis/<name>/ghidra (once, minutes); later calls reuse it read-only.
-# Each call costs ~5s JVM startup: batch all suspect points of a round into one call.
+# Each call costs ~5s JVM startup: batch all points of a round into one call.
 # Full result is saved to analysis/<name>/<binary>/query-*.txt; stdout is a trimmed view
 # (Ghidra WARNING comments and blank lines dropped, each function capped at QUERY_MAX_LINES, default 200).
 set -euo pipefail
