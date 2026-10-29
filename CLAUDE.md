@@ -23,6 +23,12 @@
 5. JS/.NET/APK 등 Ghidra가 부적합한 형식은 leanrea가 안내하는 도구로 끝낸다.
 6. 결과를 `notes/<name>.md`에 정리하고, 질문에는 근거(주소, 질의 결과)와 함께 답한다.
 
+## Python 환경
+- 분석용 Python 패키지(`requirements.txt`: pefile, hermes-dec)는 `.venv`에 있다. leanrea의 `python3 -I`/`pip install --user` 대신 `.venv/bin/python -I`, `.venv/bin/hbc-decompiler`를 쓰고, 추가 패키지는 `requirements.txt`에 넣는다.
+
+## 외부 도구
+- apt: apktool, tshark, sqlite3, wabt, llvm, dotnet-sdk-10.0(26.04에 8.0 없음). `ilspycmd`는 `~/.dotnet/tools`, jadx는 `~/tools/jadx/bin`: PATH에 없으면 전체 경로로 호출.
+
 ## Ghidra (headless, MCP 미사용)
 - 설치: `~/tools/ghidra` (12.2, JDK 25). 전체 덤프가 필요할 때만 `tools/ghidra/analyze.sh`.
 

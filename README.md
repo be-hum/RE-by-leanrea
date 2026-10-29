@@ -17,6 +17,8 @@
 - 기본 JDK가 25가 아니면 `$GHIDRA_HOME/support/launch.properties`의 `JAVA_HOME_OVERRIDE`에 JDK 25 경로 지정
 - [Claude Code](https://claude.com/claude-code)와 `leanrea` 스킬 (이 저장소에 포함되지 않음)
 
+- Python 분석 패키지: `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`
+
 ## 사용법
 
 ```sh
