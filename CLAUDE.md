@@ -9,7 +9,7 @@
 - `tmp/<name>/` 일회성 스크립트. 해당 대상의 전체 분석이 끝나면 디렉터리째 삭제한다. git 제외.
 - 파일 머리 주석: 에이전트가 만드는 모든 텍스트 파일(노트, 중간 결과물, 스크립트)은 최상단 주석에 "무엇을 위한 파일/코드인지"와 입력·생성 방법을 적는다(형식별 주석 문법 사용, Markdown은 `<!-- -->`). 주석을 넣을 수 없는 바이너리 결과물은 같은 번호의 `NN-<설명>.txt` 설명 파일을 함께 둔다.
 - `analysis/<name>/` Ghidra DB와 `query.sh`/`analyze.sh` 출력(도구가 쓰는 위치). git 제외, 재생성 가능. 에이전트가 만드는 결과물은 여기 두지 않고 `targets/<name>/result/`에 둔다.
-- `tools/ghidra/` headless 스크립트. `tools/scripts/` 대상 3개 이상에서 쓴 재사용 스크립트(용도는 `tools/scripts/README.md`).
+- `tools/ghidra/` headless 스크립트. `tools/scripts/` 여러 대상에서 쓴 재사용 스크립트(용도는 `tools/scripts/README.md`).
 - `bench/cases.tsv` 정답 매핑 테스트 장부(분석결과-소스 채점 집계).
 
 ## 판단 원칙: 관측 -> 원인 -> 조치

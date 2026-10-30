@@ -1,5 +1,6 @@
 <!-- 목적: restic 블라인드 분석 단계 01 (대상 식별). 입력: targets/restic/restic. 생성: curl 다운로드 + bunzip2 + sha256sum + go version -m + readelf. 이 단계까지 소스는 열지 않았다. -->
 # restic (B-007, 저장소 키 열기 `OpenKey`/`SearchKey` 경로)
+- 진위: 확인(릴리스 `SHA256SUMS`와 일치, 아래 출처 줄). 서명 검증은 미수행
 
 - 출처: GitHub release v0.19.1 `restic_0.19.1_linux_amd64.bz2`
   - bz2 sha256 `f415415624dcc452f2a02b8c33641791a8c6d6d3b65bbb3543fcf9a25151585c` (릴리스 `SHA256SUMS`와 일치, 확인)

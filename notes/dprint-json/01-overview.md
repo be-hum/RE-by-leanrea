@@ -1,5 +1,6 @@
 <!-- 목적: dprint-plugin-json(B-006) 블라인드 분석 단계 01 (대상 식별). 입력: targets/dprint-json/plugin.wasm. 생성: curl, sha256sum, wasm-objdump, wasm-decompile, wasm2wat, strings. 이 단계까지 소스 tarball은 받았으나 풀지 않았다. -->
 # dprint-plugin-json plugin.wasm (B-006, export `get_plugin_info`)
+- 진위: 미확인(릴리스에 별도 체크섬 없음)
 
 - 출처: GitHub release `0.25.2` `plugin.wasm` (658,096바이트)
   - sha256 `811ca4c6f732bcd6f707bc2f42d42395bb4127cdf829960cf628a18fc149777e`. 릴리스에 별도 체크섬 없음, 진위 **미확인**.

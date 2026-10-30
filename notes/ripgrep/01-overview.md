@@ -1,5 +1,6 @@
 <!-- 목적: ripgrep(B-003) 블라인드 분석 단계 01 (대상 식별과 인벤토리). 입력: targets/ripgrep/rg. 생성: curl, sha256sum, readelf, strings. 이 단계까지 소스는 열지 않았다(소스 tarball은 받았으나 풀지 않음). -->
 # ripgrep (B-003, `.gitignore` 규칙 매칭 경로)
+- 진위: 확인(릴리스 `.sha256`과 일치, 아래 출처 줄). 같은 릴리스 채널의 체크섬이라 서명 검증은 미수행
 
 - 출처: GitHub release `15.2.0` `ripgrep-15.2.0-x86_64-unknown-linux-musl.tar.gz`
   - tarball sha256 `33e15bcf1624b25cdd2a55813a47a2f95dbe126268203e76aa6a585d1e7b149c` (릴리스 `.sha256`과 일치, 확인)

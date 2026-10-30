@@ -1,5 +1,6 @@
 <!-- 목적: Aegis Authenticator(B-005) 블라인드 분석 단계 01 (대상 식별). 입력: targets/aegis/aegis-v3.4.3.apk. 생성: curl, sha256sum, unzip -l, jadx --no-res. 이 단계까지 소스 tarball은 받았으나 풀지 않았다. -->
 # Aegis Authenticator (B-005, TOTP 코드 생성)
+- 진위: 미확인(릴리스에 체크섬·서명 검증값 없음, APK 서명 미확인)
 
 - 출처: GitHub release `v3.4.3` `aegis-v3.4.3.apk` (6,881,897바이트)
   - sha256 `fa091c91912c0d56ec3553394fac4158f9a9d178e93bcbb35419601d788cb528`. 릴리스에 별도 체크섬·서명 검증값 없음, 출처 진위와 APK 서명 **미확인**.

@@ -1,5 +1,6 @@
 <!-- 목적: 7zr.exe(B-004) 블라인드 분석 단계 01 (대상 식별). 입력: targets/7zr/7zr.exe. 생성: curl, sha256sum, file, objdump -x/-h, strings. 이 단계까지 소스(7z2605-src.tar.xz)는 받았으나 풀지 않았다. -->
 # 7zr.exe (B-004, 7z 시그니처 헤더 검증 경로)
+- 진위: 미확인(릴리스 체크섬 미확인, 아래 출처 줄)
 
 - 출처: GitHub `ip7z/7zip` release 26.05 `7zr.exe`
   - sha256 `9bf582b894dfa665f852d7e9112b02290a1c303c2d95a21fcdc41ffcb03143b7`, 602,624바이트. 릴리스 쪽 체크섬 파일은 확인하지 않음(출처 진위 **미확인**).

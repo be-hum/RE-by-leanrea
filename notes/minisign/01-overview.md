@@ -1,5 +1,6 @@
 <!-- 목적: minisign(B-002) 블라인드 분석 단계 01 (대상 식별). 입력: targets/minisign/minisign. 생성: curl, tar, sha256sum, readelf, strings. 이 단계까지 소스는 열지 않았다. -->
 # minisign (B-002, `-V` 서명 검증 경로)
+- 진위: 미확인(릴리스 체크섬·서명 대조 기록 없음, 2026-10-30 점검)
 
 - 출처: GitHub release `0.12` `minisign-0.12-linux.tar.gz` (`targets/minisign/minisign-0.12-linux.tar.gz`)
   - tarball sha256 `9a599b48ba6eb7b1e80f12f36b94ceca7c00b7a5173c95c3efc88d9822957e73`

@@ -1,5 +1,6 @@
 <!-- 목적: age 분석 노트 단계 01 (overview). 출처: notes/age.md(이전 단일 노트)의 해당 절을 그대로 분할 이전. -->
 # age (`age -p` 비밀번호 기반 암호화 흐름)
+- 진위: 미확인(노트에 릴리스 체크섬·서명 대조 기록 없음, 2026-10-30 점검)
 
 - 출처: Ubuntu 패키지 `age 1.2.1-1build1`, `/usr/bin/age`를 `targets/age/age`로 복사
 - sha256 `00c07670d548aa01705923fbbecbcd6edb76a65bd73e1b5644fad0c4a60bf678`

@@ -1,5 +1,6 @@
 <!-- 목적: zoxide(B-008) 블라인드 분석 단계 01 (대상 식별). 입력: targets/zoxide/zoxide. 생성: curl, tar, sha256sum, readelf, strings, objdump. 이 단계까지 소스 tarball(analysis/zoxide/src.tar.gz)은 풀지 않았다. 범위와 앵커는 00-anchors.md에 사전 등록. -->
 # zoxide v0.10.0 (B-008, `zoxide add <path>` 경로)
+- 진위: 미확인(릴리스 체크섬·서명 대조 기록 없음, 2026-10-30 점검)
 
 - 출처: GitHub release v0.10.0 `zoxide-0.10.0-x86_64-unknown-linux-musl.tar.gz`
   - tarball sha256 `2d93385b99f3e82cf2701609a1bffcad863fbeb75aa3fe7eb6be4d29be68b1ae`, 추출 `zoxide` sha256 `0959b169db9adac07187ab99b0d9806f616fbe7938cf84f9f4e2422d8de16e6c`. 릴리스 쪽 체크섬은 확인하지 않음(진위 **미확인**).
