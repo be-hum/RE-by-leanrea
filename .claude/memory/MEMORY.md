@@ -1,1 +1,3 @@
 - [Flow first, not flag](flow-first-not-flag.md) — RE 목표는 흐름 해석(워게임/일반 공통), 특정 값은 그 결과물. 그럴듯함으로 가정 승인 금지
+- [Emulation tooling state](emulation-tooling-state.md) — Unicorn 설치·tools/emu 사용법(Twist1 첫 시행)
+- [Approval and claims feedback](feedback-approval-and-claims.md) — 승인 요청 후 응답 대기, 관측 못 한 절차 보고 금지

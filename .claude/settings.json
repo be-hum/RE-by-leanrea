@@ -1,4 +1,5 @@
 {
+  "model": "sonnet",
   "env": {
     "GOPATH": "/home/yh/projects/RE-by-leanrea/.cache/go",
     "GOMODCACHE": "/home/yh/projects/RE-by-leanrea/.cache/go/pkg/mod",

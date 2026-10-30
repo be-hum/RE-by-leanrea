@@ -1,2 +1,4 @@
-pefile
-hermes-dec
+# leanrea 분석용 Python 의존성(.REA venv). 버전은 2026-10-31에 `.REA/bin/pip freeze`로 확인한 값과 일치한다. 설치는 사용자가 `! .REA/bin/pip install -r requirements.txt`로 한다(에이전트는 설치하지 않는다).
+pefile==2024.8.26
+hermes-dec==0.1.8
+unicorn==2.1.4

@@ -19,7 +19,7 @@
 2. **막힌 원인이 계산량:** 흐름은 읽었으나 값 계산이 어렵다(디코더 루프, 복호 테이블, 상수 생성). 흐름 자체가 미확인이면 해당 없음. 패킹 해제 스텁이면 루트 CLAUDE.md 분석 흐름 2의 `upx -d`와 변조 복원 실패 기록이 먼저 있어야 한다.
 3. **닫힌 범위:** 함수 하나 또는 연속 구간. 범위 안 callee 목록을 적고, 범위 밖의 모든 callee(import, syscall, 간접 호출, 할당자, 런타임, 정적 링크 libc)는 없거나, 동작이 정적으로 확인되어 값만 돌려주는 스텁으로 대체할 수 있다.
 4. **입력 근거:** 값 자체(키, 설정값)를 묻는 고리는 레지스터·메모리 초기값마다 정적 근거(주소, result 파일 줄)가 있다. 변환의 정체(예: 이 함수가 SHA-256인가)를 묻는 고리만 공개 테스트 벡터 같은 합성 입력을 허용하고 `synthetic`으로 표시한다.
-5. **사전 기대:** 시행 전에 "무엇이 나오면 어느 고리가 확인되는가", 정지 주소, `max` 스텝을 적는다. 결과를 보고 질문을 바꾸지 않는다.
+5. **사전 기대:** 시행 전에 "무엇이 나오면 어느 고리가 확인되는가", 정지 주소, `max` 스텝을 적는다. 결과를 보고 질문을 바꾸지 않는다. 계산·탐색 방식(입력 탐색 순서, 선택 기준, 유일성 점검)도 시행 전에 적는다. 시행 중 방식을 바꾸거나 점검을 덧붙이려면 판단 기록에 변경을 남기고 3절의 새 승인 요청을 한다(관측: 2026-10-31 Twist1에서 탐색 방식을 두 번 바꾸고 sweep을 추가함).
 - 기록: `notes/<name>/NN-emulation-gate.md`에 관문 1~5를 "충족(근거) / 미충족"으로 쓴다.
 
 ## 3. 승인 요청
@@ -31,9 +31,10 @@
 에뮬레이터: <Ghidra EmulatorHelper | Unicorn>, 준비: <4절 결과>
 판단 기록: notes/<name>/NN-emulation-gate.md
 ```
-- 실제 승인은 `emu.sh` 호출 시 뜨는 하네스 확인 창이다(`.claude/settings.json` `permissions.ask`). 대화 중 승인은 확인 창을 대신하지 않는다.
+- 실제 승인은 `emu.sh`/`unicorn_run.py` 호출 시 뜨는 하네스 확인 창이다(`.claude/settings.json` `permissions.ask`). 대화 중 승인은 확인 창을 대신하지 않는다. 단 `~/.claude/settings.json`의 `defaultMode`가 `auto`이면 확인 창이 뜨지 않을 수 있다(관측: 2026-10-31 Twist1에서 확인 창이 떴다는 기록이 없었음). 그 경우 확인 창이 떴다고 쓰지 않고, 요청 글을 보인 뒤 사용자 응답을 기다려 그 응답을 승인으로 기록한다.
+- 승인 요청 글을 쓴 같은 턴에 시행하지 않는다(관측: 2026-10-31 Twist1 4회 시행이 사용자 응답 없이 진행됨).
 - 범위: 요청에 적은 함수·입력·stop·max 조합만. 재시도 조합도 미리 적지 않았으면 새로 요청한다.
-- 승인 후 판단 기록 끝에 `승인: YYYY-MM-DD, 범위: <조합>`(기록용, `emu.sh`가 2차로 검사).
+- 승인 후 에이전트가 판단 기록 끝에 `승인: YYYY-MM-DD, 범위: <조합>`을 쓴다. 러너(`emu.sh`, `unicorn_run.py`)는 같은 범위 줄이 없으면 시행하지 않고 거부한다(러너가 스스로 줄을 쓰지 않는다).
 - 거절되면 고리를 미확인으로 닫고, 그 고리에 의존하는 결론은 빼거나 조건부로 쓴다.
 
 ## 4. 준비 점검과 설치 순서
@@ -45,8 +46,8 @@
 | 2 Ghidra | `ls ~/tools/ghidra/support/analyzeHeadless`; `grep application.version ~/tools/ghidra/Ghidra/application.properties` | 존재, 버전 기록 | 통과: 12.2 | 아래 "Ghidra 설치" |
 | 3 에뮬 클래스 | `unzip -l ~/tools/ghidra/Ghidra/Framework/Emulation/lib/Emulation.jar \| grep EmulatorHelper.class` | 1행 이상 | 통과 | 단계 2로 재설치 |
 | 4 아키텍처 | `ls ~/tools/ghidra/Ghidra/Processors/<arch>/data/languages/*.sla` | `.sla` 존재 | 대상마다 | `~/tools/ghidra/support/sleigh -a <languages 디렉터리>`. 프로세서가 없으면 Unicorn 경로 |
-| 5 프로젝트 도구 | `ls tools/ghidra/emu.sh tools/ghidra/Emulate.java` | 존재 | 미구현 | 5절 인터페이스대로 구현(`Emulate.java`는 opus, `emu.sh`는 sonnet에 위임, model 명시). 첫 구현에서 `-readOnly` DB 위 동작과 `query.sh` flock 공유를 확인 |
-| 6 스모크 테스트 | 정적으로 이미 확인한 값 1건을 `emu.sh`로 재현 | 값 일치, status=STOP@지정 주소 | 미수행, 후보 미선정 | 디코딩 상수가 기록된 기존 노트(예: CRC1, CRC2, SimpleVM)에서 고른다. 처음 한 번도 3절 승인 필요 |
+| 5 프로젝트 도구 | `ls tools/ghidra/emu.sh tools/ghidra/Emulate.java` | 존재 | 미구현(Unicorn 경로로 `tools/emu/unicorn_run.py` + `profiles/twist1.py` 구현, Twist1에서 첫 시행 2026-10-31, unicorn 2.1.4 설치 확인) | 5절 인터페이스대로 구현(`Emulate.java`는 opus, `emu.sh`는 sonnet에 위임, model 명시). 첫 구현에서 `-readOnly` DB 위 동작과 `query.sh` flock 공유를 확인 |
+| 6 스모크 테스트 | 정적으로 이미 확인한 값 1건을 `emu.sh`로 재현 | 값 일치, status=STOP@지정 주소 | Unicorn 경로 통과(2026-10-31, Twist1 0x407405-0x407423: watch `5200`, STOP@0x407423, steps=8, MAPCHECK ok; 기록 notes/Twist1/02-emulation-gate.md). Ghidra emu.sh 경로는 미수행 | 디코딩 상수가 기록된 기존 노트(예: CRC1, CRC2, SimpleVM)에서 고른다. 처음 한 번도 3절 승인 필요 |
 | 7 기록 | `.claude/CLAUDE.md` 도구 절 | 종류·버전·점검일 | 미기재 | `(verified YYYY-MM-DD)`로 추가 |
 
 Ghidra 설치(단계 2·3 실패 시):
@@ -58,7 +59,7 @@ Ghidra 설치(단계 2·3 실패 시):
 
 Unicorn 경로(Ghidra 미지원 아키텍처, 또는 Ghidra 에뮬이 같은 관측으로 2회 실패했을 때만):
 1. 실패 관측을 노트에 기록.
-2. `requirements.txt`에 `unicorn`을 추가하고 알린다. 설치는 사용자가 `! .REA/bin/python -m pip install unicorn`(`.REA/bin/pip`는 shebang이 옛 FindVuln 경로라 사용 불가).
+2. `requirements.txt`에 `unicorn==<버전>`을 추가하고 알린다(2026-10-31 완료: unicorn==2.1.4). 설치는 사용자가 `! .REA/bin/pip install unicorn`(shebang은 2026-10-31에 `.REA` 경로로 고쳐 사용 가능, 이전에는 옛 FindVuln 경로라 `.REA/bin/python -m pip`만 가능했다).
 3. `.REA/bin/python -I -c 'import unicorn; print(unicorn.__version__)'`로 확인.
 4. `tools/emu/unicorn_run.py` 구현: `emu.sh`와 같은 인자·출력·승인 기록 검사. 바이트 매핑은 `readelf -l`/PE 섹션 offset으로 하고 세그먼트 offset과 대조해 검증.
 5. 단계 6 스모크 테스트를 다시 통과한 뒤 사용.
