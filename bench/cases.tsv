@@ -1,5 +1,17 @@
 # 목적: 오픈소스 대상의 분석결과-정답(소스) 매핑 테스트 장부. 한 줄 = 한 사례. 블라인드 분석 후 소스 대조로 채점한다.
-# 열: id	date	platform	format	target	version	scope	correct	inferred_hit	missed	wrong	main_causes	methods
+# 열: id	date	platform	format	target	version	scope	correct	inferred_hit	missed	wrong	main_causes	methods	blind	prereg	model
 # platform/format 예: linux-x86_64/ELF-Go, windows-x86/PE-C++, android/APK-Kotlin, avr/ELF-C, wasm/WASM-Rust
 # methods: 이 사례에서 새로 만들거나(+) 사례를 추가한(=) METHODS.md 항목
-B-001	2026-10-30	linux-x86_64	ELF-Go(stripped PIE)	age	1.2.1 (Ubuntu 1.2.1-1build1)	age -p 암호화 경로	9	2	5	0	간접 호출 미해석, bool 분기 미해석, 이름만 본 호출 미해석	+M-003 +M-101 +M-102 +M-103
+# blind: Y=소스를 받기 전에 분석을 끝냄(노트에 블라인드 기록), ?=노트에 기록 없음. 소스를 본 뒤 재분석은 notes/<name>/05-reanalysis.md에만 적고 이 장부 수치는 바꾸지 않는다.
+# prereg: Y=notes/<name>/00-anchors.md 사전 등록 사용. model: 분석 주체 모델(opus|sonnet-hop|...), ?=기록 없음.
+# 난이도: APK(B-005), WASM name 섹션 보존(B-006)은 난이도 낮음. 네이티브 집계는 이 둘을 분리한다.
+B-001	2026-10-30	linux-x86_64	ELF-Go(stripped PIE)	age	1.2.1 (Ubuntu 1.2.1-1build1)	age -p 암호화 경로	9	2	5	0	간접 호출 미해석, bool 분기 미해석, 이름만 본 호출 미해석	+M-003 +M-101 +M-102 +M-103	?	N	?
+B-007	2026-10-30	linux-x86_64	ELF-Go(stripped non-PIE)	restic	0.19.1 (GitHub release)	저장소 key 열기 OpenKey/SearchKey(비밀번호 -> scrypt -> key 복호화 -> 마스터 키)	9	3	5	2	분기 조건-오류문자열 귀속 오류, 필터가 비교 호출 은닉, 비교 인자(maxKeys/문자열) 미해석, 전역 오류 변수 미해석	=M-003 +M-004 +M-005 =M-101 =M-102 +M-104	Y	N	?
+B-002	2026-10-30	linux-x86_64	ELF-C+Zig(stripped static non-PIE)	minisign	0.12 (GitHub release)	-V 서명 검증(공개키/.minisig 파싱 -> Ed25519 -> trusted comment 검증)	9	3	4	3	함수 역할 오귀속, 서드파티 구현체 단정, 파싱 세부(trim/로드 방식) 미해석, 단계 순서 서술 오류	=M-003 +M-205 +M-206 +M-207	Y	N	?
+B-003	2026-10-30	linux-x86_64	ELF-Rust(stripped static-pie)	ripgrep	15.2.0 (GitHub release)	.gitignore 규칙 한 줄 해석과 매칭 경로	12	2	6	0	범위 단계(매칭) 담당 함수 미식별, 분기 목적지 미해석, 옵션 호출 미해석	=M-003 +M-008 +M-301	Y	N	?
+B-004	2026-10-30	windows-x86	PE32-C++(stripped, no imports of interest)	7zr.exe	26.05 (GitHub release)	7z 시그니처 헤더(32B) 읽기·검증·앞쪽 탐색	10	5	4	0	NextHeader 검증 함수 미식별(범위 후반), 복구 경로·버전 검사 미식별, 쓰기 경로와 읽기 경로 구분	=M-008 +M-209 =M-205	Y	N	?
+B-005	2026-10-30	android	APK-Java/Kotlin(R8 minified)	Aegis Authenticator	v3.4.3 (GitHub release)	TOTP 코드 생성(시크릿 -> HMAC -> 자리수 변환)	10	2	0	0	(없음) R8 병합 클래스 이름 불일치는 본문으로 판정해 해소	=M-206 +M-401	Y	N	?
+B-006	2026-10-30	wasm	WASM-Rust(name section kept)	dprint-plugin-json	0.25.2 (GitHub release)	export get_plugin_info(PluginInfo JSON 구성과 공유 버퍼 반환)	9	4	0	0	(없음) name 섹션 보존으로 난이도 낮음, 겹친 로드 중복 제거 필요	=M-103 +M-501	Y	N	?
+B-008	2026-10-30	linux-x86_64	ELF-Rust(stripped static-pie)	zoxide	v0.10.0 (GitHub release)	zoxide add 경로(S1~S5, 사전 등록 앵커)	12	4	6	0	전처리 분기 의미(건너뜀/오류 종료/기본값) 미해석, 파일 없음 경로 미해석	=M-008 =M-301 =M-003	Y	Y	?
+B-009	2026-10-30	windows-x86_64	PE32+-C(stripped, external PDB)	xz.exe	5.8.4 (GitHub release)	.xz 스트림 헤더·푸터·인덱스 연결 검증(X1~X5, 사전 등록 앵커)	9	5	3	0	헤더-푸터 비교 함수 미식별, 인덱스 교차 미식별, 스트림 패딩 분기 미해석	=M-008 =M-209 =M-003	Y	Y	?
+B-010	2026-10-30	linux-x86_64	ELF-C++(stripped non-PIE, dynamic libstdc++)	ninja	v1.13.2 (GitHub release)	.ninja_log 빌드 로그 로드(L1~L5, 사전 등록 앵커)	16	4	2	1	메시지 없는 분기의 반대쪽 결과 미해석, CALLER ? 미추적, 같은 즉시값의 다른 상수 후보 누락	=M-003 =M-008	Y	Y	opus
