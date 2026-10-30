@@ -5,7 +5,7 @@ description: Reverse engineer shipped software with plain local CLI tools on WSL
 
 # leanrea: fast path (WSL2 / Linux)
 
-You already know these tools. This file only lists the fastest command for each target, and the traps. `T` is the target copy and `$D` the per-target work dir.
+You already know these tools. This file only lists the fastest command for each target, and the traps. `T` is the target copy and `$D` the per-target work dir. Methods learned from real analyses (what failed first and what fixed it) live in `METHODS.md` next to this file: check it when a Router row's tool fails or a result looks wrong.
 
 ## First move: one call each, paste and run
 Native (ELF):

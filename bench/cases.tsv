@@ -1,0 +1,5 @@
+# 목적: 오픈소스 대상의 분석결과-정답(소스) 매핑 테스트 장부. 한 줄 = 한 사례. 블라인드 분석 후 소스 대조로 채점한다.
+# 열: id	date	platform	format	target	version	scope	correct	inferred_hit	missed	wrong	main_causes	methods
+# platform/format 예: linux-x86_64/ELF-Go, windows-x86/PE-C++, android/APK-Kotlin, avr/ELF-C, wasm/WASM-Rust
+# methods: 이 사례에서 새로 만들거나(+) 사례를 추가한(=) METHODS.md 항목
+B-001	2026-10-30	linux-x86_64	ELF-Go(stripped PIE)	age	1.2.1 (Ubuntu 1.2.1-1build1)	age -p 암호화 경로	9	2	5	0	간접 호출 미해석, bool 분기 미해석, 이름만 본 호출 미해석	+M-003 +M-101 +M-102 +M-103

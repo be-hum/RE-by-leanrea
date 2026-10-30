@@ -58,6 +58,7 @@ tools/ghidra/analyze.sh targets/foo/binary
 | `targets/` | 분석 대상 원본 (`targets/<name>/`) | 제외 |
 | `analysis/` | Ghidra 프로젝트 DB, 질의 결과, 작업 파일 | 제외 |
 | `notes/` | 대상별 분석 결과 (`notes/<name>/NN-*.md`) | 포함 |
+| `bench/` | 정답 매핑 테스트 장부 (`bench/cases.tsv`) | 포함 |
 | `tmp/` | 일회성 스크립트 (`tmp/<name>/`, 분석 완료 후 삭제) | 제외 |
 | `tools/ghidra/` | `query.sh`, `Query.java`, `FixEntry.java`, `analyze.sh`, `ExportAll.java` | 포함 |
 
