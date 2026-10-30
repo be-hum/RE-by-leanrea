@@ -27,6 +27,7 @@
 
 ## 함정
 - `fn.py`: `<rodata_lo> <rodata_hi>`가 문자열 주석 범위(16진수 VA)다. PE에 `0 0`을 주면 주석이 꺼진다(B-009 xz). ELF static-pie는 `readelf -SW`의 `.rodata` 시작~끝, PE는 `objdump -h`의 `.rdata` VMA~VMA+size.
+- `fn.py`: 직접 call을 `call\s+0x...` 형식으로만 모은다. non-PIE ELF의 `objdump -dC` 출력(`call   403a00 <sym@plt>`, 0x 없음)에서는 call 대상이 비어 `start`가 TypeError로 끝난다(B-010 ninja). 이때는 `query.sh str:`로 함수 시작을 얻는다.
 - `strann.py`: `.rodata` 범위가 코드에 상수로 박혀 있다(`RO0,RO1,OFF`, minisign 값). 다른 대상에 쓰기 전에 그 줄을 대상의 `.rodata` VA 범위와 파일 오프셋 차이로 고친다.
 - `ann.py`: 함수 표 TSV는 `start end name`(16진수, `#` 주석 줄 무시). `gosym-funcs` 출력과 같은 형식이다. PIE Go면 보정값(M-102)을 적용한 표를 쓴다.
 - `gosym-funcs`: go1.20+ pclntab 매직(`f1 ff ff ff 00 00`)만 탐색한다. 그 이전 버전 바이너리는 "pclntab not found"로 끝난다.

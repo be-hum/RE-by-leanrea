@@ -14,3 +14,4 @@ B-005	2026-10-30	android	APK-Java/Kotlin(R8 minified)	Aegis Authenticator	v3.4.3
 B-006	2026-10-30	wasm	WASM-Rust(name section kept)	dprint-plugin-json	0.25.2 (GitHub release)	export get_plugin_info(PluginInfo JSON 구성과 공유 버퍼 반환)	9	4	0	0	(없음) name 섹션 보존으로 난이도 낮음, 겹친 로드 중복 제거 필요	=M-103 +M-501	Y	N	?
 B-008	2026-10-30	linux-x86_64	ELF-Rust(stripped static-pie)	zoxide	v0.10.0 (GitHub release)	zoxide add 경로(S1~S5, 사전 등록 앵커)	12	4	6	0	전처리 분기 의미(건너뜀/오류 종료/기본값) 미해석, 파일 없음 경로 미해석	=M-008 =M-301 =M-003	Y	Y	?
 B-009	2026-10-30	windows-x86_64	PE32+-C(stripped, external PDB)	xz.exe	5.8.4 (GitHub release)	.xz 스트림 헤더·푸터·인덱스 연결 검증(X1~X5, 사전 등록 앵커)	9	5	3	0	헤더-푸터 비교 함수 미식별, 인덱스 교차 미식별, 스트림 패딩 분기 미해석	=M-008 =M-209 =M-003	Y	Y	?
+B-010	2026-10-30	linux-x86_64	ELF-C++(stripped non-PIE, dynamic libstdc++)	ninja	v1.13.2 (GitHub release)	.ninja_log 빌드 로그 로드(L1~L5, 사전 등록 앵커)	16	4	2	1	메시지 없는 분기의 반대쪽 결과 미해석, CALLER ? 미추적, 같은 즉시값의 다른 상수 후보 누락	=M-003 =M-008	Y	Y	opus
