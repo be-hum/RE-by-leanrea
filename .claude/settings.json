@@ -1,0 +1,9 @@
+{
+  "env": {
+    "GOPATH": "/home/yh/projects/RE-by-leanrea/.cache/go",
+    "GOMODCACHE": "/home/yh/projects/RE-by-leanrea/.cache/go/pkg/mod",
+    "GOCACHE": "/home/yh/projects/RE-by-leanrea/.cache/go-build",
+    "npm_config_cache": "/home/yh/projects/RE-by-leanrea/.cache/npm",
+    "PIP_REQUIRE_VIRTUALENV": "true"
+  }
+}

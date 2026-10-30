@@ -9,6 +9,8 @@ targets/*
 # Ghidra project DBs and headless exports (regenerable)
 analysis/
 __pycache__/
-.venv/
+.REA/
 *.pyc
 .claude/settings.local.json
+.cache/
+tmp/

@@ -1,0 +1,1 @@
+- [Flow first, not flag](flow-first-not-flag.md) — RE 목표는 흐름 해석(워게임/일반 공통), 특정 값은 그 결과물. 그럴듯함으로 가정 승인 금지
